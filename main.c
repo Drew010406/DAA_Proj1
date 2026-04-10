@@ -2,6 +2,12 @@
 #include <time.h>
 #include <stdlib.h>
 
+void Copy_array(int source[], int dest[], int n) {
+    for (int i = 0; i < n; i++) {
+        dest[i] = source[i];
+    }
+}
+
 void Selection_sort(int Arr[], int n);
 void Bubble_sort(int Arr[], int n);
 void Insertion_sort(int Arr[], int n);
@@ -13,7 +19,6 @@ void Quick_sort(int Arr[], int low, int high);
 void Heap_sort(int Arr[], int size);
 
 int main() {
-
     clock_t start, end;
     double cpu_time_used; 
 
@@ -45,7 +50,8 @@ int main() {
             printf("numbers[%d]: %d\n", i+1, numbers[i]);
         }
         printf("\nRandom array generated.\n");
-    } else if (data_method == 2) {
+    }
+    else if (data_method == 2) {
         printf("Enter starting positive integer X: ");
         scanf("%d", &start_val);
         for (int i = 0; i < n; i++) {
@@ -53,7 +59,8 @@ int main() {
             printf("numbers[%d]: %d\n", i+1, numbers[i]);
         }
         printf("\nIncreasing sequence generated.\n");
-    } else {
+    }
+    else {
         printf("Invalid choice.\n");
         free(numbers);
         return 1;
@@ -98,6 +105,9 @@ int main() {
             printf("Please select a valid algorithm!\n");
             break;
         }
+
+        free(numbers);
+        return 0;
 }
 
 
