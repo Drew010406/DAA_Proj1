@@ -11,7 +11,10 @@ void Insertion_sort(int Arr[], int n);
 void merge(int Arr[], int left, int mid, int right);
 void Merge_sort(int Arr[], int left, int right);
 
+int partition(int Arr[], int low, int high)
 void Quick_sort(int Arr[], int low, int high);
+
+void heapify(int Arr[], int n, int i);
 void Heap_sort(int Arr[], int size);
 
 int main() {
@@ -39,6 +42,10 @@ int main() {
         printf("Memory allocation failed.\n");
         return 1;
     }
+
+    //seed random number generator
+    srand((unsigned int)time(NULL));
+
 
     if (data_method == 1) {
         for (int i = 0; i < n; i++) {
