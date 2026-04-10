@@ -17,33 +17,49 @@ int main() {
     clock_t start, end;
     double cpu_time_used; 
 
-    unsigned long int MAX_RANGE = 1000; //maximum possible intiger
+    unsigned long int MAX_RANGE = 1000000; // maximum possible integer
 
-    //asks and stores the number of elements
-    int n;
-    int sort_algo;
+    // asks and stores the number of elements
+    int n, data_method, start_val, sort_algo;
 
     printf("Number of elements: ");
     scanf("%d", &n);
 
-    //elements array
-    int numbers[n];
+    printf("Data Generation Method:\n");
+    printf("\t1. Randomly Generated Integers\n");
+    printf("\t2. Increasing Sequence\n");
+    printf("Choice: ");
+    scanf("%d", &data_method);
+    printf("\n");
 
-    //randomizes intigers and stores them in the array
-    for (int i = 0; i < n; i++) {
-
-         // rand() generates a number ; % MAXRANGE + 1 takes the remainder by the max number and adds 1 to include max[min, max)
-        numbers[i] = (rand() % MAX_RANGE+1); 
+    // allocate array
+    int *numbers = (int*)malloc(n * sizeof(int));
+    if (numbers == NULL) {
+        printf("Memory allocation failed.\n");
+        return 1;
     }
 
-    //prints elements
-    for (int j=0; j< n; j++) {
-
-        printf("numbers[%d] : %d\n", j+1, numbers[j]);
+    if (data_method == 1) {
+        for (int i = 0; i < n; i++) {
+            numbers[i] = rand() % (MAX_RANGE + 1);
+            printf("numbers[%d]: %d\n", i+1, numbers[i]);
+        }
+        printf("\nRandom array generated.\n");
+    } else if (data_method == 2) {
+        printf("Enter starting positive integer X: ");
+        scanf("%d", &start_val);
+        for (int i = 0; i < n; i++) {
+            numbers[i] = start_val + i;
+            printf("numbers[%d]: %d\n", i+1, numbers[i]);
+        }
+        printf("\nIncreasing sequence generated.\n");
+    } else {
+        printf("Invalid choice.\n");
+        free(numbers);
+        return 1;
     }
-    printf("\n\nNumbers Successfully Generated...\n\n\n");
 
-    printf("Select a sorting algorithm: \n1.Selection Sort\n2.Bubble Sort\n3. Insertion Sort\n4.Merge Sort\n5.Quick Sort\n6. Heap Sort\n\n");
+    printf("\nSelect a sorting algorithm: \n1.Selection Sort\n2.Bubble Sort\n3. Insertion Sort\n4.Merge Sort\n5.Quick Sort\n6. Heap Sort\n\n");
     scanf("%d", &sort_algo);
 
     //selection of algorithm (Need pa dagdagan error handling pero goods na muna to)
@@ -82,8 +98,6 @@ int main() {
             printf("Please select a valid algorithm!\n");
             break;
         }
-    start = clock();
-
 }
 
 
