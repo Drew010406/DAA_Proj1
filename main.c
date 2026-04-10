@@ -77,8 +77,8 @@ int main() {
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Selection Sort: %f seconds\n", cpu_time);
 
-    free(numbers);
     free(work);
+    free(numbers);
     return 0;
 }
 
@@ -103,22 +103,106 @@ void Selection_sort(int Arr[], int n) {
 }
 
 void Bubble_sort(int Arr[], int n) {
-
+    int swapped;
+    for (int i = 0; i < n-1; i++) {
+        swapped = 0;
+        for (int j = 0; j < n-i-1; j++) {
+            if (Arr[j] > Arr[j+1]) {
+                int temp = Arr[j];
+                Arr[j] = Arr[j+1];
+                Arr[j+1] = temp;
+                swapped = 1;
+            }
+        }
+        if (!swapped) break;
+    }
 }
-void Insertion_sort(int Arr[], int n) {
 
+void Insertion_sort(int Arr[], int n) {
+    for (int i = 1; i < n; i++) {
+        int key = Arr[i];
+        int j = i - 1;
+        while (j >= 0 && Arr[j] > key) {
+            Arr[j+1] = Arr[j];
+            j--;
+        }
+        Arr[j+1] = key;
+    }
 }
 
 void merge(int Arr[], int left, int mid, int right) {
-
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+    int *L = (int*)malloc(n1 * sizeof(int));
+    int *R = (int*)malloc(n2 * sizeof(int));
+    for (int i = 0; i < n1; i++) L[i] = Arr[left + i];
+    for (int j = 0; j < n2; j++) R[j] = Arr[mid + 1 + j];
+    int i = 0, j = 0, k = left;
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) Arr[k++] = L[i++];
+        else Arr[k++] = R[j++];
+    }
+    while (i < n1) Arr[k++] = L[i++];
+    while (j < n2) Arr[k++] = R[j++];
+    free(L);
+    free(R);
 }
-void Merge_sort(int Arr[], int left, int right) {
 
+void Merge_sort(int Arr[], int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+        Merge_sort(Arr, left, mid);
+        Merge_sort(Arr, mid+1, right);
+        merge(Arr, left, mid, right);
+    }
+}
+
+int partition(int Arr[], int low, int high) {
+    int pivot = Arr[high];
+    int i = low - 1;
+    for (int j = low; j < high; j++) {
+        if (Arr[j] <= pivot) {
+            i++;
+            int temp = Arr[i];
+            Arr[i] = Arr[j];
+            Arr[j] = temp;
+        }
+    }
+    int temp = Arr[i+1];
+    Arr[i+1] = Arr[high];
+    Arr[high] = temp;
+    return i+1;
 }
 
 void Quick_sort(int Arr[], int low, int high) {
-
+    if (low < high) {
+        int pi = partition(Arr, low, high);
+        Quick_sort(Arr, low, pi-1);
+        Quick_sort(Arr, pi+1, high);
+    }
 }
-void Heap_sort(int Arr[], int size) {
 
+void heapify(int Arr[], int n, int i) {
+    int largest = i;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
+    if (left < n && Arr[left] > Arr[largest]) largest = left;
+    if (right < n && Arr[right] > Arr[largest]) largest = right;
+    if (largest != i) {
+        int temp = Arr[i];
+        Arr[i] = Arr[largest];
+        Arr[largest] = temp;
+        heapify(Arr, n, largest);
+    }
+}
+
+void Heap_sort(int Arr[], int n) {
+    for (int i = n/2 - 1; i >= 0; i--)
+        heapify(Arr, n, i);
+    for (int i = n-1; i > 0; i--) {
+        int temp = Arr[0];
+        Arr[0] = Arr[i];
+        Arr[i] = temp;
+        heapify(Arr, i, 0);
+    }
 }
