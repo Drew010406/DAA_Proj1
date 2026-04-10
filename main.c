@@ -39,7 +39,7 @@ int main() {
     //prints elements
     for (int j=0; j< n; j++) {
 
-        printf("numbers[%d] : %d\n", j, numbers[j]);
+        printf("numbers[%d] : %d\n", j+1, numbers[j]);
     }
     printf("\n\nNumbers Successfully Generated...\n\n\n");
 
@@ -83,5 +83,31 @@ int main() {
             break;
         }
     start = clock();
+
+}
+
+
+void Selection_sort(int Arr[], int n) {
+
+
+}
+void Bubble_sort(int Arr[], int n) {
+
+}
+void Insertion_sort(int Arr[], int n) {
+
+}
+
+void merge(int Arr[], int left, int mid, int right) {
+
+}
+void Merge_sort(int Arr[], int left, int right) {
+
+}
+
+void Quick_sort(int Arr[], int low, int high) {
+
+}
+void Heap_sort(int Arr[], int size) {
 
 }
