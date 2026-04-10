@@ -11,7 +11,7 @@ void Insertion_sort(int Arr[], int n);
 void merge(int Arr[], int left, int mid, int right);
 void Merge_sort(int Arr[], int left, int right);
 
-int partition(int Arr[], int low, int high)
+int partition(int Arr[], int low, int high);
 void Quick_sort(int Arr[], int low, int high);
 
 void heapify(int Arr[], int n, int i);
@@ -50,7 +50,6 @@ int main() {
     if (data_method == 1) {
         for (int i = 0; i < n; i++) {
             numbers[i] = rand() % (MAX_RANGE + 1);
-            printf("numbers[%d]: %d\n", i+1, numbers[i]);
         }
         printf("\nRandom array generated.\n");
     }
@@ -59,7 +58,6 @@ int main() {
         scanf("%d", &start_val);
         for (int i = 0; i < n; i++) {
             numbers[i] = start_val + i;
-            printf("numbers[%d]: %d\n", i+1, numbers[i]);
         }
         printf("\nIncreasing sequence generated.\n");
     }
@@ -83,6 +81,41 @@ int main() {
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Selection Sort: %f seconds\n", cpu_time);
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Bubble_sort(work, n);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Bubble Sort: %f seconds\n", cpu_time);
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Insertion_sort(work, n);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Insertion Sort: %f seconds\n", cpu_time);
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Merge_sort(work, 0, n - 1);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Merge Sort: %f seconds\n", cpu_time);
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Quick_sort(work, 0, n - 1);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Quick Sort: %f seconds\n", cpu_time);
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Heap_sort(work, n);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Heap Sort: %f seconds\n", cpu_time);
 
     free(work);
     free(numbers);
