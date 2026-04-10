@@ -21,6 +21,8 @@ int main() {
 
     //asks and stores the number of elements
     int n;
+    int sort_algo;
+
     printf("Number of elements: ");
     scanf("%d", &n);
 
@@ -39,7 +41,47 @@ int main() {
 
         printf("numbers[%d] : %d\n", j, numbers[j]);
     }
+    printf("\n\nNumbers Successfully Generated...\n\n\n");
 
+    printf("Select a sorting algorithm: \n1.Selection Sort\n2.Bubble Sort\n3. Insertion Sort\n4.Merge Sort\n5.Quick Sort\n6. Heap Sort\n\n");
+    scanf("%d", &sort_algo);
+
+    //selection of algorithm (Need pa dagdagan error handling pero goods na muna to)
+    switch (sort_algo)
+        {
+        case 1:
+            Selection_sort(numbers, n);
+            break;
+        
+        case 2:
+
+            Insertion_sort(numbers, n);
+            break;
+        
+        case 3:
+        
+            Bubble_sort(numbers, n);
+            break;
+        
+        case 4:
+        
+            Merge_sort(numbers, 0, n-1);
+            break;
+
+        case 5:
+        
+            Quick_sort(numbers, 0, n-1);
+            break;
+        
+        case 6:
+        
+            Heap_sort(numbers, n);
+            break;
+
+        default:
+            printf("Please select a valid algorithm!\n");
+            break;
+        }
     start = clock();
 
 }
