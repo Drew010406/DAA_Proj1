@@ -198,7 +198,15 @@ void Merge_sort(int Arr[], int left, int right) {
 }
 
 int partition(int Arr[], int low, int high) {
-    int pivot = Arr[high];
+    int mid = low + (high - low) / 2;
+    if (Arr[mid] < Arr[low]) { int t = Arr[low]; Arr[low] = Arr[mid]; Arr[mid] = t; }
+    if (Arr[high] < Arr[low]) { int t = Arr[low]; Arr[low] = Arr[high]; Arr[high] = t; }
+    if (Arr[high] < Arr[mid]) { int t = Arr[mid]; Arr[mid] = Arr[high]; Arr[high] = t; }
+
+    int pivot = Arr[mid];
+    Arr[mid] = Arr[high];
+    Arr[high] = pivot;
+
     int i = low - 1;
     for (int j = low; j < high; j++) {
         if (Arr[j] <= pivot) {
