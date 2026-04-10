@@ -2,11 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-void Copy_array(int source[], int dest[], int n) {
-    for (int i = 0; i < n; i++) {
-        dest[i] = source[i];
-    }
-}
+void Copy_array(int source[], int dest[], int n);
 
 void Selection_sort(int Arr[], int n);
 void Bubble_sort(int Arr[], int n);
@@ -20,12 +16,12 @@ void Heap_sort(int Arr[], int size);
 
 int main() {
     clock_t start, end;
-    double cpu_time_used; 
+    double cpu_time; 
 
     unsigned long int MAX_RANGE = 1000000; // maximum possible integer
 
     // asks and stores the number of elements
-    int n, data_method, start_val, sort_algo;
+    int n, data_method, start_val;
 
     printf("Number of elements: ");
     scanf("%d", &n);
@@ -66,55 +62,46 @@ int main() {
         return 1;
     }
 
-    printf("\nSelect a sorting algorithm: \n1.Selection Sort\n2.Bubble Sort\n3. Insertion Sort\n4.Merge Sort\n5.Quick Sort\n6. Heap Sort\n\n");
-    scanf("%d", &sort_algo);
-
-    //selection of algorithm (Need pa dagdagan error handling pero goods na muna to)
-    switch (sort_algo)
-        {
-        case 1:
-            Selection_sort(numbers, n);
-            break;
-        
-        case 2:
-
-            Insertion_sort(numbers, n);
-            break;
-        
-        case 3:
-        
-            Bubble_sort(numbers, n);
-            break;
-        
-        case 4:
-        
-            Merge_sort(numbers, 0, n-1);
-            break;
-
-        case 5:
-        
-            Quick_sort(numbers, 0, n-1);
-            break;
-        
-        case 6:
-        
-            Heap_sort(numbers, n);
-            break;
-
-        default:
-            printf("Please select a valid algorithm!\n");
-            break;
-        }
-
+    //working array
+    int *work = (int*)malloc(n * sizeof(int));
+    if (work == NULL) {
+        printf("Memory allocation failed.\n");
         free(numbers);
-        return 0;
+        return 1;
+    }
+
+    Copy_array(work, numbers, n);
+    start = clock();
+    Selection_sort(work, n);
+    end = clock();
+    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
+    printf("Selection Sort: %f seconds\n", cpu_time);
+
+    free(numbers);
+    free(work);
+    return 0;
 }
 
+void Copy_array(int source[], int dest[], int n) {
+    for (int i = 0; i < n; i++) {
+        dest[i] = source[i];
+    }
+}
 
 void Selection_sort(int Arr[], int n) {
-
-
+    for (int i = 0; i < n-1; i++) {
+        int min_idx = i;
+        for (int j = i+1; j < n; j++) {
+            if (Arr[j] < Arr[min_idx]) min_idx = j;
+        }
+        if (min_idx != i) {
+            int temp = Arr[i];
+            Arr[i] = Arr[min_idx];
+            Arr[min_idx] = temp;
+        }
+    }
 }
+
 void Bubble_sort(int Arr[], int n) {
 
 }
