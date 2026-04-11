@@ -19,14 +19,15 @@ void heapify(int Arr[], int n, int i);
 void Heap_sort(int Arr[], int size);
 
 int main() {
+    // variables for timing
     clock_t start, end;
     double cpu_time; 
 
     unsigned long int MAX_RANGE = 1000000; // maximum possible integer
 
-    // asks and stores the number of elements
     int n, data_method, start_val;
-
+    
+    // user input for array size and data generation method
     printf("Number of elements: ");
     scanf("%d", &n);
 
@@ -35,7 +36,6 @@ int main() {
     printf("\t2. Increasing Sequence\n");
     printf("Choice: ");
     scanf("%d", &data_method);
-    printf("\n");
 
     // allocate array
     int *numbers = (int*)malloc(n * sizeof(int));
@@ -44,9 +44,8 @@ int main() {
         return 1;
     }
 
-    //seed random number generator
+    // seed random number generator (prevents same sequence on each run)
     srand((unsigned int)time(NULL));
-
 
     if (data_method == 1) {
         for (int i = 0; i < n; i++) {
@@ -68,7 +67,7 @@ int main() {
         return 1;
     }
 
-    //working array
+    // working array
     int *work = (int*)malloc(n * sizeof(int));
     if (work == NULL) {
         printf("Memory allocation failed.\n");
@@ -129,12 +128,14 @@ int main() {
     return 0;
 }
 
+// copies contents of source array to destination array
 void Copy_array(int source[], int dest[], int n) {
     for (int i = 0; i < n; i++) {
         dest[i] = source[i];
     }
 }
 
+// appends original and sorted arrays to output file with algorithm name
 void arr2file(const char *filename, const int original[], const int sorted[], int n, const char *algo) {
     FILE *f = fopen(filename, "a");
     if (!f) return;
