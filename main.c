@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 void Copy_array(int source[], int dest[], int n);
+void arr2file(const char *filename, const int original[], const int sorted[], int n, const char *algo);
 
 void Selection_sort(int Arr[], int n);
 void Bubble_sort(int Arr[], int n);
@@ -75,47 +76,53 @@ int main() {
         return 1;
     }
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Selection_sort(work, n);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Selection Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Selection Sort");
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Bubble_sort(work, n);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Bubble Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Bubble Sort");
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Insertion_sort(work, n);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Insertion Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Insertion Sort");
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Merge_sort(work, 0, n - 1);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Merge Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Merge Sort");
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Quick_sort(work, 0, n - 1);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Quick Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Quick Sort");
 
-    Copy_array(work, numbers, n);
+    Copy_array(numbers, work, n);
     start = clock();
     Heap_sort(work, n);
     end = clock();
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Heap Sort: %f seconds\n", cpu_time);
+    arr2file("output.txt", numbers, work, n, "Heap Sort");
 
     free(work);
     free(numbers);
@@ -126,6 +133,24 @@ void Copy_array(int source[], int dest[], int n) {
     for (int i = 0; i < n; i++) {
         dest[i] = source[i];
     }
+}
+
+void arr2file(const char *filename, const int original[], const int sorted[], int n, const char *algo) {
+    FILE *f = fopen(filename, "a");
+    if (!f) return;
+    fprintf(f, "\n--- %s ---\n", algo);
+    fprintf(f, "Original array (%d elements):\n", n);
+    for (int i = 0; i < n; i++) {
+        fprintf(f, "%d ", original[i]);
+        if ((i+1) % 20 == 0) fprintf(f, "\n");
+    }
+    fprintf(f, "\nSorted array (%d elements):\n", n);
+    for (int i = 0; i < n; i++) {
+        fprintf(f, "%d ", sorted[i]);
+        if ((i+1) % 20 == 0) fprintf(f, "\n");
+    }
+    fprintf(f, "\n");
+    fclose(f);
 }
 
 void Selection_sort(int Arr[], int n) {
