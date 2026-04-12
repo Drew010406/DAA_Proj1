@@ -67,6 +67,20 @@ int main() {
         return 1;
     }
 
+    // label for output file header: tells the reader which input type was used
+    const char *input_label = (data_method == 1) ? "Random Input" : "Sorted (Increasing) Input";
+
+    // clear output file and write the run header before any sort results
+    FILE *fout = fopen("output.txt", "w");
+    if (fout) {
+        fprintf(fout, "========================================\n");
+        fprintf(fout, "  Empirical Analysis of Sorting Algorithms\n");
+        fprintf(fout, "  Input Type : %s\n", input_label);
+        fprintf(fout, "  N          : %d\n", n);
+        fprintf(fout, "========================================\n");
+        fclose(fout);
+    }
+
     // working array
     int *work = (int*)malloc(n * sizeof(int));
     if (work == NULL) {
@@ -74,6 +88,9 @@ int main() {
         free(numbers);
         return 1;
     }
+
+    // print console header so timing table is easy to read
+    printf("\n--- %s | N = %d ---\n", input_label, n);
 
     Copy_array(numbers, work, n);
     start = clock();
@@ -122,6 +139,8 @@ int main() {
     cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
     printf("Heap Sort: %f seconds\n", cpu_time);
     arr2file("output.txt", numbers, work, n, "Heap Sort");
+
+    printf("\nResults written to output.txt\n");
 
     free(work);
     free(numbers);
