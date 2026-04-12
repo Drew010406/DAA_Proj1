@@ -2,6 +2,8 @@
 #include <time.h>
 #include <stdlib.h>
 
+#define NUM_TESTS 5
+
 void Copy_array(int source[], int dest[], int n);
 void arr2file(const char *filename, const int original[], const int sorted[], int n, const char *algo);
 
@@ -18,15 +20,42 @@ void Quick_sort(int Arr[], int low, int high);
 void heapify(int Arr[], int n, int i);
 void Heap_sort(int Arr[], int size);
 
-int main() {
-    // variables for timing
+/* Runs a single sort algorithm NUM_TESTS times on fresh copies of the original
+   array, prints each trial time, prints the average, and writes the final
+   sorted result to the output file. */
+static void run_sort(
+    const char     *label,
+    void          (*sort_fn)(int[], int),        /* simple sorts: (arr, n)    */
+    void          (*sort_range_fn)(int[], int, int), /* range sorts: (arr, lo, hi) */
+    int            *numbers,
+    int            *work,
+    int             n,
+    const char     *filename
+) {
     clock_t start, end;
-    double cpu_time; 
+    double  times[NUM_TESTS];
+    double  total = 0.0;
 
+    for (int t = 0; t < NUM_TESTS; t++) {
+        Copy_array(numbers, work, n);
+        start = clock();
+        if (sort_fn)       sort_fn(work, n);
+        else               sort_range_fn(work, 0, n - 1);
+        end   = clock();
+        times[t] = ((double)(end - start)) / CLOCKS_PER_SEC;
+        total   += times[t];
+        printf("  Test %d: %f seconds\n", t + 1, times[t]);
+    }
+
+    printf("  Average: %f seconds\n\n", total / NUM_TESTS);
+    arr2file(filename, numbers, work, n, label);
+}
+
+int main() {
     unsigned long int MAX_RANGE = 1000000; // maximum possible integer
 
     int n, data_method, start_val;
-    
+
     // user input for array size and data generation method
     printf("Number of elements: ");
     scanf("%d", &n);
@@ -77,6 +106,7 @@ int main() {
         fprintf(fout, "  Empirical Analysis of Sorting Algorithms\n");
         fprintf(fout, "  Input Type : %s\n", input_label);
         fprintf(fout, "  N          : %d\n", n);
+        fprintf(fout, "  Tests      : %d runs per algorithm\n", NUM_TESTS);
         fprintf(fout, "========================================\n");
         fclose(fout);
     }
@@ -90,57 +120,27 @@ int main() {
     }
 
     // print console header so timing table is easy to read
-    printf("\n--- %s | N = %d ---\n", input_label, n);
+    printf("\n--- %s | N = %d | %d tests per algorithm ---\n\n", input_label, n, NUM_TESTS);
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Selection_sort(work, n);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Selection Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Selection Sort");
+    printf("Selection Sort:\n");
+    run_sort("Selection Sort", Selection_sort, NULL, numbers, work, n, "output.txt");
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Bubble_sort(work, n);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Bubble Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Bubble Sort");
+    printf("Bubble Sort:\n");
+    run_sort("Bubble Sort", Bubble_sort, NULL, numbers, work, n, "output.txt");
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Insertion_sort(work, n);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Insertion Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Insertion Sort");
+    printf("Insertion Sort:\n");
+    run_sort("Insertion Sort", Insertion_sort, NULL, numbers, work, n, "output.txt");
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Merge_sort(work, 0, n - 1);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Merge Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Merge Sort");
+    printf("Merge Sort:\n");
+    run_sort("Merge Sort", NULL, Merge_sort, numbers, work, n, "output.txt");
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Quick_sort(work, 0, n - 1);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Quick Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Quick Sort");
+    printf("Quick Sort:\n");
+    run_sort("Quick Sort", NULL, Quick_sort, numbers, work, n, "output.txt");
 
-    Copy_array(numbers, work, n);
-    start = clock();
-    Heap_sort(work, n);
-    end = clock();
-    cpu_time = ((double)(end - start)) / CLOCKS_PER_SEC;
-    printf("Heap Sort: %f seconds\n", cpu_time);
-    arr2file("output.txt", numbers, work, n, "Heap Sort");
+    printf("Heap Sort:\n");
+    run_sort("Heap Sort", Heap_sort, NULL, numbers, work, n, "output.txt");
 
-    printf("\nResults written to output.txt\n");
+    printf("Results written to output.txt\n");
 
     free(work);
     free(numbers);
