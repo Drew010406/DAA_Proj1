@@ -20,31 +20,44 @@ void Quick_sort(int Arr[], int low, int high);
 void heapify(int Arr[], int n, int i);
 void Heap_sort(int Arr[], int size);
 
-/* Runs a single sort algorithm NUM_TESTS times on fresh copies of the original
-   array, prints each trial time, prints the average, and writes the final
-   sorted result to the output file. */
+/* Runs a single sort algorithm NUM_TESTS times, each on a newly generated
+   random array, prints each trial time, prints the average, and writes the
+   final sorted result to the output file. */
 static void run_sort(
     const char     *label,
-    void          (*sort_fn)(int[], int),        /* simple sorts: (arr, n)    */
-    void          (*sort_range_fn)(int[], int, int), /* range sorts: (arr, lo, hi) */
+    void          (*sort_fn)(int[], int),
+    void          (*sort_range_fn)(int[], int, int),
     int            *numbers,
     int            *work,
     int             n,
-    const char     *filename
+    unsigned long   max_range,
+    const char     *filename,
+    int             is_random 
 ) {
     clock_t start, end;
-    double  times[NUM_TESTS];
     double  total = 0.0;
 
     for (int t = 0; t < NUM_TESTS; t++) {
+        // Regenerate data per run only if the user selected random input
+        if (is_random) {
+            for (int i = 0; i < n; i++) {
+                numbers[i] = rand() % (max_range + 1);
+            }
+        }
+        
         Copy_array(numbers, work, n);
+        
         start = clock();
-        if (sort_fn)       sort_fn(work, n);
-        else               sort_range_fn(work, 0, n - 1);
-        end   = clock();
-        times[t] = ((double)(end - start)) / CLOCKS_PER_SEC;
-        total   += times[t];
-        printf("  Test %d: %f seconds\n", t + 1, times[t]);
+        if (sort_fn) {
+            sort_fn(work, n);
+        } else {
+            sort_range_fn(work, 0, n - 1);
+        }
+        end = clock();
+        
+        double elapsed = ((double)(end - start)) / CLOCKS_PER_SEC;
+        total += elapsed;
+        printf("  Test %d: %f seconds\n", t + 1, elapsed);
     }
 
     printf("  Average: %f seconds\n\n", total / NUM_TESTS);
@@ -123,22 +136,22 @@ int main() {
     printf("\n--- %s | N = %d | %d tests per algorithm ---\n\n", input_label, n, NUM_TESTS);
 
     printf("Selection Sort:\n");
-    run_sort("Selection Sort", Selection_sort, NULL, numbers, work, n, "output.txt");
+    run_sort("Selection Sort", Selection_sort, NULL, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Bubble Sort:\n");
-    run_sort("Bubble Sort", Bubble_sort, NULL, numbers, work, n, "output.txt");
+    run_sort("Bubble Sort", Bubble_sort, NULL, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Insertion Sort:\n");
-    run_sort("Insertion Sort", Insertion_sort, NULL, numbers, work, n, "output.txt");
+    run_sort("Insertion Sort", Insertion_sort, NULL, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Merge Sort:\n");
-    run_sort("Merge Sort", NULL, Merge_sort, numbers, work, n, "output.txt");
+    run_sort("Merge Sort", NULL, Merge_sort, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Quick Sort:\n");
-    run_sort("Quick Sort", NULL, Quick_sort, numbers, work, n, "output.txt");
+    run_sort("Quick Sort", NULL, Quick_sort, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Heap Sort:\n");
-    run_sort("Heap Sort", Heap_sort, NULL, numbers, work, n, "output.txt");
+    run_sort("Heap Sort", Heap_sort, NULL, numbers, work, n, MAX_RANGE, "output.txt", data_method == 1);
 
     printf("Results written to output.txt\n");
 
